@@ -28,7 +28,7 @@ fun Application.module(testing: Boolean = false) {
         get("{...}") {
             val routingCall = context as? RoutingApplicationCall
             println("Route: ${routingCall?.route}")
-            call.respond(Error(code = "100"))
+            call.respond(message = Error(code = "100"), status = HttpStatusCode.BadRequest)
         }
     }
 }

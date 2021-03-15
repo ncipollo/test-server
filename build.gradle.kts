@@ -22,9 +22,21 @@ repositories {
 
 dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-serialization:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0-RC")
 }
+
+tasks {
+    register<JavaExec>("generateJks")
+    named<JavaExec>("generateJks") {
+        dependsOn("classes")
+        classpath(sourceSets.main.get().runtimeClasspath)
+        main = "nickcipollo.com.test.CertificateGenerator"
+    }
+}
+
+getTasksByName("run", false).first().dependsOn("generateJks")
